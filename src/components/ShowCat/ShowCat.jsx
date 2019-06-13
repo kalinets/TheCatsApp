@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { DEFAULT_SEARCH_URL } from '../../constants'
 import './ShowCat.sass'
 
 class ShowCat extends Component {
+  static propTypes = {
+    isOnline: PropTypes.bool,
+  }
+
   state = {
     urlWithKitty: '',
     loading: false,
@@ -24,11 +29,12 @@ class ShowCat extends Component {
   }
 
   render() {
+    const { isOnline } = this.props
     const { urlWithKitty, loading } = this.state
 
     return (
       <>
-        <button onClick={this.toggleClick} className="show-cat-button">
+        <button onClick={this.toggleClick} className="show-cat-button" disabled={!isOnline}>
           Show random cat
         </button>
         <div className="cat-img-container">
