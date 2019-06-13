@@ -28,8 +28,12 @@ class ShowCat extends Component {
 
     return (
       <>
-        <button onClick={this.toggleClick}>Show random cat</button>
-        <div>{loading ? 'Loading...' : <img src={urlWithKitty} alt="" />}</div>
+        <button onClick={this.toggleClick} className="show-cat-button">
+          Show random cat
+        </button>
+        <div className="cat-img-container">
+          {loading ? 'Loading...' : <img src={urlWithKitty} alt="" className="cat-img" />}
+        </div>
       </>
     )
   }

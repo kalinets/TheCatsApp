@@ -1,15 +1,19 @@
 {
-  "name": "the_cat_app",
+  "name": "the_cats_app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Test assignment with The Cats API",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development --hot --port 6125",
     "eslint": "node_modules/.bin/eslint src/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kalinets/TheCatsApp.git"
+  },
   "keywords": [],
-  "author": "",
+  "author": "Uladzimir Kalinets",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.4.5",
