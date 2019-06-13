@@ -1,3 +1,6 @@
-export const DEFAULT_SEARCH_URL = 'https://api.thecatapi.com/v1/images/search'
-export const API_KEY = '434cd5bf-2567-420d-9f9c-3fb7ee6ed642'
+export const API_KEY = '3a54f87e-245c-499a-b552-c423e6595899'
 export const API_USER_ID = 'izf5yy'
+export const DEFAULT_SEARCH_URL = 'https://api.thecatapi.com/v1/images/search'
+export const BREED_SEARCH_URL = 'https://api.thecatapi.com/v1/breeds'
+export const SEARCH_BY_BREED_URL = 'https://api.thecatapi.com/v1/images/search?breed_ids='
+export const FAVOURITES_URL = 'https://api.thecatapi.com/v1/favourites'

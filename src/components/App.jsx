@@ -1,27 +1,25 @@
 import React, { Component } from 'react'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import Favourites from './Favourites/Favourites'
 import ShowCat from './ShowCat/ShowCat'
+import NavBar from './NavBar/NavBar'
+import OfflineBanner from './OfflineBanner/OfflineBanner'
+import WelcomePage from './WelcomePage/WelcomePage'
 import './App.sass'
 
 class App extends Component {
-  state = {
-    isOnline: true,
-  }
-
-  componentDidMount() {
-    window.addEventListener('offline', this.connectionHandler)
-    window.addEventListener('online', this.connectionHandler)
-  }
-
-  connectionHandler = () => this.setState({ isOnline: navigator.onLine ? true : false })
-
   render() {
-    const { isOnline } = this.state
     return (
-      <>
+      <BrowserRouter>
+        <NavBar />
         <h1 className="app-title">The Cats App by @jason</h1>
-        <ShowCat isOnline={isOnline} />
-        {!isOnline && <div className="app-offline"><strong>You are offline</strong></div>}
-      </>
+        <Switch>
+          <Route path="/favourites" component={Favourites} />
+          <Route path="/view" component={ShowCat} />
+          <Route path="/" component={WelcomePage} />
+        </Switch>
+        <OfflineBanner />
+      </BrowserRouter>
     )
   }
 }
