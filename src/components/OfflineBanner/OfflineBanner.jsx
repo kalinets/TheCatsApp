@@ -6,6 +6,7 @@ class OfflineBanner extends Component {
   }
 
   componentDidMount() {
+    this.connectionHandler()
     window.addEventListener('offline', this.connectionHandler)
     window.addEventListener('online', this.connectionHandler)
   }
@@ -19,7 +20,7 @@ class OfflineBanner extends Component {
       <>
         {!isOnline && (
           <div className="app-offline">
-            <strong>You are offline</strong>
+            <strong>No connection</strong>
           </div>
         )}
       </>

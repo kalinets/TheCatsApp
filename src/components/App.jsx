@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Favourites from './Favourites/Favourites'
-import ShowCat from './ShowCat/ShowCat'
+import ViewCat from './ViewCat/ViewCat'
 import NavBar from './NavBar/NavBar'
 import OfflineBanner from './OfflineBanner/OfflineBanner'
 import WelcomePage from './WelcomePage/WelcomePage'
+import NotFound from './NotFound/NotFound'
 import './App.sass'
 
 class App extends Component {
@@ -14,9 +15,10 @@ class App extends Component {
         <NavBar />
         <h1 className="app-title">The Cats App by @jason</h1>
         <Switch>
-          <Route path="/favourites" component={Favourites} />
-          <Route path="/view" component={ShowCat} />
-          <Route path="/" component={WelcomePage} />
+          <Route exact path="/favourites" component={Favourites} />
+          <Route exact path="/view" component={ViewCat} />
+          <Route exact path="/" component={WelcomePage} />
+          <Route path="*" component={NotFound}/>
         </Switch>
         <OfflineBanner />
       </BrowserRouter>

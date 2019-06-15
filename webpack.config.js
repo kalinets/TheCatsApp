@@ -1,5 +1,5 @@
-const webpack = require("webpack");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require('webpack')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const isDevelopment = true
 
 module.exports = {
@@ -9,57 +9,40 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ["babel-loader"]
-      },
-      {
-        test: /\.module\.s(a|c)ss$/,
-        loader: [
-          isDevelopment ? "style-loader" : MiniCssExtractPlugin.loader,
-          {
-            loader: "css-loader",
-            options: {
-              modules: true,
-              localIdentName: "[name]__[local]___[hash:base64:5]",
-              camelCase: true,
-              sourceMap: isDevelopment
-            }
-          },
-          {
-            loader: "sass-loader",
-            options: {
-              sourceMap: isDevelopment
-            }
-          }
-        ]
+        use: ['babel-loader'],
       },
       {
         test: /\.s(a|c)ss$/,
         exclude: /\.module.(s(a|c)ss)$/,
         loader: [
-          isDevelopment ? "style-loader" : MiniCssExtractPlugin.loader,
-          "css-loader",
+          isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
           {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: {
-              sourceMap: isDevelopment
-            }
-          }
-        ]
-      }
-    ]
+              sourceMap: isDevelopment,
+            },
+          },
+        ],
+      },
+    ],
   },
   resolve: {
-    extensions: ["*", ".js", ".jsx", ".sass"]
+    extensions: ['*', '.js', '.jsx', '.sass'],
+    alias: {
+      $componetns: __dirname + '/src/components',
+      $constants: __dirname + '/src/constants',
+    },
   },
   output: {
-    path: __dirname + "/dist",
-    publicPath: "/",
-    filename: "bundle.js"
+    path: __dirname + '/dist',
+    publicPath: '/',
+    filename: 'bundle.js',
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
   devServer: {
     historyApiFallback: true,
-    contentBase: "./dist",
-    hot: true
-  }
-};
+    contentBase: './dist',
+    hot: true,
+  },
+}
