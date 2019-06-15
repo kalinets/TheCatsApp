@@ -13,6 +13,7 @@ class NavBar extends Component {
         <Link to="/">Home</Link>
         <Link to="/view">View cats</Link>
         <Link to="/favourites">Favourite cats</Link>
+        <button>Sign Out</button>
       </nav>
     )
   }

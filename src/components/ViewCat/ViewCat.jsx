@@ -15,6 +15,7 @@ class ViewCat extends Component {
     loadingImg: false,
     selectedBreed: '',
     selectedCatId: '',
+    addedToFavourites: false,
   }
 
   componentDidMount() {
@@ -28,7 +29,12 @@ class ViewCat extends Component {
       const res = await fetch(DEFAULT_SEARCH_URL)
       if (res.ok) {
         const data = await res.json()
-        this.setState({ urlWithKitty: data[0].url, selectedCatId: data[0].id, loadingImg: false })
+        this.setState({
+          urlWithKitty: data[0].url,
+          selectedCatId: data[0].id,
+          loadingImg: false,
+          addedToFavourites: false,
+        })
       }
     } catch (error) {
       this.setState({ loadingImg: false })
@@ -55,7 +61,12 @@ class ViewCat extends Component {
       const res = await fetch(SEARCH_BY_BREED_URL + this.state.selectedBreed)
       if (res.ok) {
         const data = await res.json()
-        this.setState({ urlWithKitty: data[0].url, selectedCatId: data[0].id, loadingImg: false })
+        this.setState({
+          urlWithKitty: data[0].url,
+          selectedCatId: data[0].id,
+          loadingImg: false,
+          addedToFavourites: false,
+        })
       }
     } catch (error) {
       throw new Error(error)
@@ -78,7 +89,11 @@ class ViewCat extends Component {
         body: JSON.stringify({ image_id: this.state.selectedCatId, sub_id: 'abramov88' }),
       })
       if (res.ok) {
-        alert('added')
+        const data = await res.json()
+        if (data.message === 'SUCCESS') {
+          this.setState({ addedToFavourites: true })
+          alert('added')
+        }
       }
     } catch (error) {
       throw new Error(error)
@@ -86,7 +101,7 @@ class ViewCat extends Component {
   }
 
   render() {
-    const { breeds, urlWithKitty, loadingImg, selectedBreed } = this.state
+    const { breeds, urlWithKitty, loadingImg, selectedBreed, addedToFavourites } = this.state
 
     return (
       <>
@@ -102,12 +117,16 @@ class ViewCat extends Component {
             </option>
           ))}
         </select>
-        <button onClick={this.getSpecificBreedImage}>Show another cat of seleced breed</button>
+        {selectedBreed && (
+          <button onClick={this.getSpecificBreedImage}>Show another cat of seleced breed</button>
+        )}
         <div className="cat-img-container">
           {loadingImg && <h4>Loading...</h4>}
           {urlWithKitty && (
             <>
-              <button onClick={this.addFavourite}>Add to favourites</button>
+              <button onClick={this.addFavourite} disabled={addedToFavourites}>
+                Add to favourites
+              </button>
               <img src={urlWithKitty} alt="cat" className="cat-img" />
             </>
           )}

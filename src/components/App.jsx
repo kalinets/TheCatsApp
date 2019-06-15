@@ -6,6 +6,7 @@ import NavBar from './NavBar/NavBar'
 import OfflineBanner from './OfflineBanner/OfflineBanner'
 import WelcomePage from './WelcomePage/WelcomePage'
 import NotFound from './NotFound/NotFound'
+import SignUpPage from './SignUpPage/SignUpPage'
 import './App.sass'
 
 class App extends Component {
@@ -15,10 +16,11 @@ class App extends Component {
         <NavBar />
         <h1 className="app-title">The Cats App by @jason</h1>
         <Switch>
-          <Route exact path="/favourites" component={Favourites} />
-          <Route exact path="/view" component={ViewCat} />
+          <Route path="/favourites" component={Favourites} />
+          <Route path="/signup" component={SignUpPage} />
+          <Route path="/view" component={ViewCat} />
           <Route exact path="/" component={WelcomePage} />
-          <Route path="*" component={NotFound}/>
+          <Route path="*" component={NotFound} />
         </Switch>
         <OfflineBanner />
       </BrowserRouter>
