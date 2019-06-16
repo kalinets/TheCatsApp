@@ -3,7 +3,17 @@ import PropTypes from 'prop-types'
 import { HOME } from '../../constants/routes'
 import { auth } from '../../firebase'
 
-class SignInForm extends Component {
+type Props = {
+  history: mixed,
+}
+
+type State = {
+  email: String,
+  password: String,
+  error: Object,
+}
+
+class SignInForm extends Component<Props, State> {
   static propTypes = {
     history: PropTypes.object,
   }

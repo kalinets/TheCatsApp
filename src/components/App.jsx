@@ -1,4 +1,6 @@
-import React, { Component } from 'react'
+// @flow
+
+import React from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import withAuthentication from '../hoc/withAuthentication'
 import * as Routes from '../constants/routes'
@@ -11,24 +13,20 @@ import NotFound from './NotFound/NotFound'
 import SignInPage from './SignInPage/SignInPage'
 import SignUpPage from './SignUpPage/SignUpPage'
 
-class App extends Component {
-  render() {
-    return (
-      <BrowserRouter>
-        <NavBar />
-        <h1>The Cats App by @jason</h1>
-        <Switch>
-          <Route exact path={Routes.HOME} component={WelcomePage} />
-          <Route path={Routes.FAVOURITES} component={Favourites} />
-          <Route path={Routes.SIGN_UP} component={SignUpPage} />
-          <Route path={Routes.SIGN_IN} component={SignInPage} />
-          <Route path={Routes.VIEW_CAT} component={ViewCat} />
-          <Route path="*" component={NotFound} />
-        </Switch>
-        <OfflineBanner />
-      </BrowserRouter>
-    )
-  }
-}
+const App = () => (
+  <BrowserRouter>
+    <NavBar />
+    <h1>The Cats App by @jason</h1>
+    <Switch>
+      <Route exact path={Routes.HOME} component={WelcomePage} />
+      <Route path={Routes.FAVOURITES} component={Favourites} />
+      <Route path={Routes.SIGN_UP} component={SignUpPage} />
+      <Route path={Routes.SIGN_IN} component={SignInPage} />
+      <Route path={Routes.VIEW_CAT} component={ViewCat} />
+      <Route path="*" component={NotFound} />
+    </Switch>
+    <OfflineBanner />
+  </BrowserRouter>
+)
 
 export default withAuthentication(App)

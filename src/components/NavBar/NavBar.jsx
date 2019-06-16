@@ -5,7 +5,12 @@ import { API_KEY } from '../../constants'
 import * as Routes from '../../constants/routes'
 import AuthUserContext from '../AuthUserContext/AuthUserContext'
 
-class NavBar extends Component {
+type State = {
+  favourite: Array<Object>,
+  error: Object,
+}
+
+class NavBar extends Component<{}, State> {
   state = {
     favourites: [],
     error: '',

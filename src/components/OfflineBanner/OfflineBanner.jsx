@@ -1,6 +1,12 @@
+// @flow
+
 import React, { Component } from 'react'
 
-class OfflineBanner extends Component {
+type State = {
+  isOnline: boolean
+}
+
+class OfflineBanner extends Component<{}, State> {
   state = {
     isOnline: true,
   }
