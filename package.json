@@ -4,9 +4,22 @@
   "description": "Test assignment with The Cats API",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.config.js --mode development --hot --port 6125",
+    "build": "webpack --config ./webpack.prod.js --mode production",
+    "dev": "webpack-dev-server --config ./webpack.dev.js --mode development --port 6125",
     "eslint": "node_modules/.bin/eslint src/",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "repository": {
     "type": "git",
@@ -39,6 +52,7 @@
     "webpack-dev-server": "^3.7.1"
   },
   "dependencies": {
+    "firebase": "^6.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1"

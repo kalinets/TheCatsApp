@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import { FAVOURITES_URL, API_KEY } from '$constants'
+import withAuthorization from '../../hoc/withAuthorization'
+import { firebase } from '../../firebase'
+import * as Constants from '../../constants'
 
 class Favourites extends Component {
   state = {
@@ -8,22 +10,24 @@ class Favourites extends Component {
     error: null,
   }
   componentDidMount() {
-    this.getFavs()
+    firebase.auth.onAuthStateChanged(authUser => {
+      this.getFavs(authUser.uid)
+    })
   }
 
-  getFavs = async () => {
+  getFavs = async userId => {
     try {
       this.setState({ loading: true })
       const res = await fetch('https://api.thecatapi.com/v1/favourites', {
         crossDomain: true,
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': API_KEY,
+          'x-api-key': Constants.API_KEY,
         },
       })
       if (res.ok) {
         const data = await res.json()
-        const filteredCats = data.filter(cat => cat.sub_id === 'abramov88')
+        const filteredCats = data.filter(cat => cat.sub_id === userId)
         this.setState({ favourites: filteredCats, loading: false })
       }
     } catch (error) {
@@ -35,7 +39,7 @@ class Favourites extends Component {
   addFavouriteBack = async () => {
     try {
       console.log('added back')
-      // const res = await fetch(FAVOURITES_URL, {
+      // const res = await fetch(Constants.FAVOURITES_URL, {
       //   method: 'POST',
       //   headers: {
       //     'Content-Type': 'application/json',
@@ -51,21 +55,20 @@ class Favourites extends Component {
     }
   }
 
-  removeFavorite = async (favId, catId) => {
-    console.log(favId, catId)
-    // try {
-    //   const res = await fetch(FAVOURITES_URL + '/' + favId, {
-    //     method: 'DELETE',
-    //     headers: {
-    //       'x-api-key': API_KEY,
-    //     },
-    //   })
-    //   if (res.ok) {
-    //     alert('removed')
-    //   }
-    // } catch (error) {
-    //   throw new Error(error)
-    // }
+  removeFavorite = async favId => {
+    try {
+      const res = await fetch(Constants.FAVOURITES_URL + '/' + favId, {
+        method: 'DELETE',
+        headers: {
+          'x-api-key': Constants.API_KEY,
+        },
+      })
+      if (res.ok) {
+        alert('removed')
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   render() {
@@ -82,7 +85,7 @@ class Favourites extends Component {
                 ? 'You have no favourite cat images'
                 : favourites.map(cat => (
                     <li key={cat.id}>
-                      {cat.image.url}{' '}
+                      <img src={cat.image.url} alt="cat" className="cat-img" />
                       <button onClick={() => this.removeFavorite(cat.id, cat.image_id)}>
                         Remove
                       </button>
@@ -99,4 +102,6 @@ class Favourites extends Component {
   }
 }
 
-export default Favourites
+const authCondition = authUser => !!authUser
+
+export default withAuthorization(authCondition)(Favourites)

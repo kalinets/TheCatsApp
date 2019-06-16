@@ -1,6 +1,4 @@
 const webpack = require('webpack')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const isDevelopment = true
 
 module.exports = {
   entry: ['@babel/polyfill', './src/index.js'],
@@ -15,12 +13,12 @@ module.exports = {
         test: /\.s(a|c)ss$/,
         exclude: /\.module.(s(a|c)ss)$/,
         loader: [
-          isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'style-loader',
           'css-loader',
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: isDevelopment,
+              sourceMap: true,
             },
           },
         ],
@@ -32,6 +30,8 @@ module.exports = {
     alias: {
       $componetns: __dirname + '/src/components',
       $constants: __dirname + '/src/constants',
+      $firebase: __dirname + '/src/firebase',
+      $hoc: __dirname + '/src/hoc',
     },
   },
   output: {

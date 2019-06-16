@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
-import {
-  FAVOURITES_URL,
-  API_KEY,
-  DEFAULT_SEARCH_URL,
-  BREED_SEARCH_URL,
-  SEARCH_BY_BREED_URL,
-} from '$constants'
+import * as Constants from '../../constants'
+import withAuthorization from '../../hoc/withAuthorization'
+import AuthUserContext from '../AuthUserContext/AuthUserContext'
 import './ViewCat.sass'
 
 class ViewCat extends Component {
@@ -26,7 +22,7 @@ class ViewCat extends Component {
     if (this.state.loadingImg) return null
     try {
       this.setState({ loadingImg: true, urlWithKitty: '', selectedBreed: '' })
-      const res = await fetch(DEFAULT_SEARCH_URL)
+      const res = await fetch(Constants.DEFAULT_SEARCH_URL)
       if (res.ok) {
         const data = await res.json()
         this.setState({
@@ -44,7 +40,7 @@ class ViewCat extends Component {
 
   getAllBreeds = async () => {
     try {
-      const res = await fetch(BREED_SEARCH_URL)
+      const res = await fetch(Constants.BREED_SEARCH_URL)
       if (res.ok) {
         const data = await res.json()
         this.setState({ breeds: data })
@@ -58,7 +54,7 @@ class ViewCat extends Component {
     if (this.state.loadingImg) return null
     try {
       this.setState({ loadingImg: true, urlWithKitty: '' })
-      const res = await fetch(SEARCH_BY_BREED_URL + this.state.selectedBreed)
+      const res = await fetch(Constants.SEARCH_BY_BREED_URL + this.state.selectedBreed)
       if (res.ok) {
         const data = await res.json()
         this.setState({
@@ -78,15 +74,15 @@ class ViewCat extends Component {
     this.getSpecificBreedImage()
   }
 
-  addFavourite = async () => {
+  addFavourite = async userId => {
     try {
-      const res = await fetch(FAVOURITES_URL, {
+      const res = await fetch(Constants.FAVOURITES_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': API_KEY,
+          'x-api-key': Constants.API_KEY,
         },
-        body: JSON.stringify({ image_id: this.state.selectedCatId, sub_id: 'abramov88' }),
+        body: JSON.stringify({ image_id: this.state.selectedCatId, sub_id: userId }),
       })
       if (res.ok) {
         const data = await res.json()
@@ -104,36 +100,44 @@ class ViewCat extends Component {
     const { breeds, urlWithKitty, loadingImg, selectedBreed, addedToFavourites } = this.state
 
     return (
-      <>
-        <button onClick={this.handleClick} className="show-cat-button">
-          Show random cat
-        </button>
-        Select breed:
-        <select onChange={this.handleSelect} value={selectedBreed}>
-          <option value="" />
-          {breeds.map(breed => (
-            <option key={breed.id} value={breed.id}>
-              {breed.name}
-            </option>
-          ))}
-        </select>
-        {selectedBreed && (
-          <button onClick={this.getSpecificBreedImage}>Show another cat of seleced breed</button>
-        )}
-        <div className="cat-img-container">
-          {loadingImg && <h4>Loading...</h4>}
-          {urlWithKitty && (
-            <>
-              <button onClick={this.addFavourite} disabled={addedToFavourites}>
-                Add to favourites
+      <AuthUserContext.Consumer>
+        {authUser => (
+          <>
+            <button onClick={this.handleClick} className="show-cat-button">
+              Show random cat
+            </button>
+            Select breed:
+            <select onChange={this.handleSelect} value={selectedBreed}>
+              <option value="" />
+              {breeds.map(breed => (
+                <option key={breed.id} value={breed.id}>
+                  {breed.name}
+                </option>
+              ))}
+            </select>
+            {selectedBreed && (
+              <button onClick={this.getSpecificBreedImage}>
+                Show another cat of seleced breed
               </button>
-              <img src={urlWithKitty} alt="cat" className="cat-img" />
-            </>
-          )}
-        </div>
-      </>
+            )}
+            <div className="cat-img-container">
+              {loadingImg && <h4>Loading...</h4>}
+              {urlWithKitty && (
+                <>
+                  <button onClick={() => this.addFavourite(authUser.uid)} disabled={addedToFavourites}>
+                    Add to favourites
+                  </button>
+                  <img src={urlWithKitty} alt="cat" className="cat-img" />
+                </>
+              )}
+            </div>
+          </>
+        )}
+      </AuthUserContext.Consumer>
     )
   }
 }
 
-export default ViewCat
+const authCondition = authUser => !!authUser
+
+export default withAuthorization(authCondition)(ViewCat)

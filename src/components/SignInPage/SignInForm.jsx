@@ -3,30 +3,32 @@ import PropTypes from 'prop-types'
 import { HOME } from '../../constants/routes'
 import { auth } from '../../firebase'
 
-class SignUpForm extends Component {
+class SignInForm extends Component {
   static propTypes = {
     history: PropTypes.object,
   }
 
-  state = { email: '', passwordOne: '', passwordTwo: '', error: '' }
+  state = {
+    email: '',
+    password: '',
+    error: '',
+  }
 
   handleChange = e => this.setState({ [e.target.name]: e.target.value })
 
   handleSubmit = e => {
     const { history } = this.props
-    const { email, passwordOne } = this.state
+    const { email, password } = this.state
     auth
-      .doCreateUserWithEmailAndPassword(email, passwordOne)
-      .then(() => {
-        history.push(HOME)
-      })
+      .doSignInWithEmailAndPassword(email, password)
+      .then(() => history.push(HOME))
       .catch(error => this.setState({ error }))
     e.preventDefault()
   }
 
   render() {
-    const { email, passwordOne, passwordTwo, error } = this.state
-    const isInvalid = passwordOne !== passwordTwo || !passwordOne
+    const { email, password, error } = this.state
+    const isInvalid = !email || !password
     return (
       <form onSubmit={this.handleSubmit}>
         <li>
@@ -34,33 +36,21 @@ class SignUpForm extends Component {
             type="email"
             name="email"
             placeholder="email"
-            onChange={this.handleChange}
             value={email}
-            required
+            onChange={this.handleChange}
           />
         </li>
         <li>
           <input
             type="password"
-            name="passwordOne"
-            placeholder="enter password"
+            name="password"
+            placeholder="password"
+            value={password}
             onChange={this.handleChange}
-            value={passwordOne}
-            required
           />
         </li>
         <li>
-          <input
-            type="password"
-            name="passwordTwo"
-            placeholder="repeat password"
-            onChange={this.handleChange}
-            value={passwordTwo}
-            required
-          />
-        </li>
-        <li>
-          <button disabled={isInvalid}>Submit</button>
+          <button disabled={isInvalid}>Sign in</button>
         </li>
         {error && <p>{error.message}</p>}
       </form>
@@ -68,4 +58,4 @@ class SignUpForm extends Component {
   }
 }
 
-export default SignUpForm
+export default SignInForm
