@@ -17,6 +17,7 @@ class SignInForm extends Component {
   handleChange = e => this.setState({ [e.target.name]: e.target.value })
 
   handleSubmit = e => {
+    this.setState({ error: '' })
     const { history } = this.props
     const { email, password } = this.state
     auth
@@ -31,27 +32,29 @@ class SignInForm extends Component {
     const isInvalid = !email || !password
     return (
       <form onSubmit={this.handleSubmit}>
-        <li>
+        <div>
           <input
             type="email"
             name="email"
             placeholder="email"
             value={email}
             onChange={this.handleChange}
+            onFocus={() => this.setState({ error: '' })}
           />
-        </li>
-        <li>
+        </div>
+        <div>
           <input
             type="password"
             name="password"
             placeholder="password"
             value={password}
             onChange={this.handleChange}
+            onFocus={() => this.setState({ error: '' })}
           />
-        </li>
-        <li>
+        </div>
+        <div>
           <button disabled={isInvalid}>Sign in</button>
-        </li>
+        </div>
         {error && <p>{error.message}</p>}
       </form>
     )

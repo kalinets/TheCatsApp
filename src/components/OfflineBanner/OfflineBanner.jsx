@@ -6,7 +6,7 @@ class OfflineBanner extends Component {
   }
 
   componentDidMount() {
-    // this.connectionHandler()
+    this.connectionHandler()
     window.addEventListener('offline', this.connectionHandler)
     window.addEventListener('online', this.connectionHandler)
   }

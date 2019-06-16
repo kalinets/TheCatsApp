@@ -8,14 +8,20 @@ class Favourites extends Component {
     favourites: null,
     loading: true,
     error: null,
+    removed: [],
   }
+
   componentDidMount() {
+    this.updateFavourites()
+  }
+
+  updateFavourites = () => {
     firebase.auth.onAuthStateChanged(authUser => {
-      this.getFavs(authUser.uid)
+      this.getAllFavourites(authUser.uid)
     })
   }
 
-  getFavs = async userId => {
+  getAllFavourites = async userId => {
     try {
       this.setState({ loading: true })
       const res = await fetch('https://api.thecatapi.com/v1/favourites', {
@@ -27,30 +33,11 @@ class Favourites extends Component {
       })
       if (res.ok) {
         const data = await res.json()
-        const filteredCats = data.filter(cat => cat.sub_id === userId)
-        this.setState({ favourites: filteredCats, loading: false })
+        const filteredFavourites = data.filter(favourite => favourite.sub_id === userId)
+        this.setState({ favourites: filteredFavourites, loading: false })
       }
     } catch (error) {
       this.setState({ error, loading: false })
-      throw new Error(error)
-    }
-  }
-
-  addFavouriteBack = async () => {
-    try {
-      console.log('added back')
-      // const res = await fetch(Constants.FAVOURITES_URL, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'x-api-key': API_KEY,
-      //   },
-      //   body: JSON.stringify({ image_id: this.state.selectedCatId, sub_id: 'abramov88' }),
-      // })
-      // if (res.ok) {
-      //   alert('added')
-      // }
-    } catch (error) {
       throw new Error(error)
     }
   }
@@ -64,15 +51,45 @@ class Favourites extends Component {
         },
       })
       if (res.ok) {
-        alert('removed')
+        this.setState(prevState => {
+          const newRemoved = [...prevState.removed, favId]
+          return { removed: newRemoved }
+        })
       }
     } catch (error) {
       throw new Error(error)
     }
   }
 
+  addFavouriteBack = async (favId, imageId, userId) => {
+    try {
+      const res = await fetch(Constants.FAVOURITES_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': Constants.API_KEY,
+        },
+        body: JSON.stringify({ image_id: imageId, sub_id: userId }),
+      })
+      if (res.ok) {
+        const newRemoved = [...this.state.removed]
+        var index = newRemoved.indexOf(favId)
+        if (index !== -1) {
+          newRemoved.splice(index, 1)
+          this.setState({ removed: newRemoved })
+          this.updateFavourites()
+        }
+      }
+    } catch (error) {
+      this.setState({ error })
+      throw new Error(error)
+    }
+  }
+
+  isRemoved = id => this.state.removed.includes(id)
+
   render() {
-    const { favourites, loading, error } = this.state
+    const { favourites, loading } = this.state
     return (
       <>
         <h2>Favourites</h2>
@@ -80,21 +97,29 @@ class Favourites extends Component {
           <h4>Loading...</h4>
         ) : (
           <div>
-            {favourites &&
-              (!favourites.length
-                ? 'You have no favourite cat images'
-                : favourites.map(cat => (
-                    <li key={cat.id}>
-                      <img src={cat.image.url} alt="cat" className="cat-img" />
-                      <button onClick={() => this.removeFavorite(cat.id, cat.image_id)}>
-                        Remove
+            {!favourites.length
+              ? 'You have no favourite cat images'
+              : favourites.map(favourite => (
+                  <div
+                    key={favourite.id}
+                    className={`id${favourite.id} ${
+                      this.isRemoved(favourite.id) ? 'true' : 'false'
+                    }`}
+                  >
+                    <img src={favourite.image.url} alt="cat" />
+                    {this.isRemoved(favourite.id) ? (
+                      <button
+                        onClick={() =>
+                          this.addFavouriteBack(favourite.id, favourite.image_id, favourite.sub_id)
+                        }
+                      >
+                        Add back to favorites
                       </button>
-                      {/* <button>Add back to favorites</button> */}
-                    </li>
-                  )))
-            //: favourites.map(cat => <img key={cat.id} src={cat.image.url} alt="cat" />)
-            }
-            {error && <p>{error.message}</p>}
+                    ) : (
+                      <button onClick={() => this.removeFavorite(favourite.id)}>Remove</button>
+                    )}
+                  </div>
+                ))}
           </div>
         )}
       </>

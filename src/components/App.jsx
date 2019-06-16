@@ -10,14 +10,13 @@ import WelcomePage from './WelcomePage/WelcomePage'
 import NotFound from './NotFound/NotFound'
 import SignInPage from './SignInPage/SignInPage'
 import SignUpPage from './SignUpPage/SignUpPage'
-import './App.sass'
 
 class App extends Component {
   render() {
     return (
       <BrowserRouter>
         <NavBar />
-        <h1 className="app-title">The Cats App by @jason</h1>
+        <h1>The Cats App by @jason</h1>
         <Switch>
           <Route exact path={Routes.HOME} component={WelcomePage} />
           <Route path={Routes.FAVOURITES} component={Favourites} />

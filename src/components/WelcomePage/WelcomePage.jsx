@@ -1,12 +1,22 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import AuthUserContext from '../AuthUserContext/AuthUserContext'
 
 const WelcomePage = () => (
   <>
     <h2>Welcome to cat lovers app.</h2>
-    <p>
-      <Link to="/signup">Create an account</Link> if you have not one.
-    </p>
+    <AuthUserContext.Consumer>
+      {user => (
+        <>
+          {!user && (
+            <p>
+              <Link to="/signup">Create account</Link>
+              {` to see beautiful cats and have fun ;)`}
+            </p>
+          )}
+        </>
+      )}
+    </AuthUserContext.Consumer>
   </>
 )
 

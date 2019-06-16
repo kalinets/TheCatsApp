@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import * as Constants from '../../constants'
+import { firebase } from '../../firebase'
 import withAuthorization from '../../hoc/withAuthorization'
 import AuthUserContext from '../AuthUserContext/AuthUserContext'
-import './ViewCat.sass'
 
 class ViewCat extends Component {
   state = {
@@ -11,30 +11,51 @@ class ViewCat extends Component {
     loadingImg: false,
     selectedBreed: '',
     selectedCatId: '',
-    addedToFavourites: false,
+    isAddedToFavourites: false,
+    error: '',
+    favourites: null,
+    favouriteId: '',
+    isBeingAddedToFavourites: false,
+    isBeingRemovedFromFavourites: false,
   }
 
   componentDidMount() {
     this.getAllBreeds()
+    this.updateFavourites()
   }
 
-  handleClick = async () => {
-    if (this.state.loadingImg) return null
+  updateFavourites = () => {
+    firebase.auth.onAuthStateChanged(authUser => {
+      this.getAllFavourites(authUser.uid)
+    })
+  }
+
+  getRandomCat = async () => {
+    const { favourites, loadingImg } = this.state
+    if (loadingImg) return null
     try {
-      this.setState({ loadingImg: true, urlWithKitty: '', selectedBreed: '' })
+      this.setState({
+        loadingImg: true,
+        urlWithKitty: '',
+        selectedCatId: '',
+        selectedBreed: '',
+        isAddedToFavourites: false,
+      })
       const res = await fetch(Constants.DEFAULT_SEARCH_URL)
       if (res.ok) {
         const data = await res.json()
+        const isFavourite = favourites.some(favourite => favourite.image_id === data[0].id)
         this.setState({
           urlWithKitty: data[0].url,
           selectedCatId: data[0].id,
           loadingImg: false,
-          addedToFavourites: false,
+          isAddedToFavourites: isFavourite,
+          favouriteId:
+            isFavourite && favourites.find(favourite => favourite.image_id === data[0].id).id,
         })
       }
     } catch (error) {
-      this.setState({ loadingImg: false })
-      throw new Error(error)
+      this.setState({ loadingImg: false, error })
     }
   }
 
@@ -46,26 +67,30 @@ class ViewCat extends Component {
         this.setState({ breeds: data })
       }
     } catch (error) {
-      throw new Error(error)
+      this.setState({ error })
     }
   }
 
   getSpecificBreedImage = async () => {
-    if (this.state.loadingImg) return null
+    const { favourites, loadingImg, selectedBreed } = this.state
+    if (loadingImg) return null
     try {
-      this.setState({ loadingImg: true, urlWithKitty: '' })
-      const res = await fetch(Constants.SEARCH_BY_BREED_URL + this.state.selectedBreed)
+      this.setState({ loadingImg: true, urlWithKitty: '', isAddedToFavourites: false })
+      const res = await fetch(Constants.SEARCH_BY_BREED_URL + selectedBreed)
       if (res.ok) {
         const data = await res.json()
+        const isFavourite = favourites.some(favourite => favourite.image_id === data[0].id)
         this.setState({
           urlWithKitty: data[0].url,
           selectedCatId: data[0].id,
           loadingImg: false,
-          addedToFavourites: false,
+          isAddedToFavourites: isFavourite,
+          favouriteId:
+            isFavourite && favourites.find(favourite => favourite.image_id === data[0].id).id,
         })
       }
     } catch (error) {
-      throw new Error(error)
+      this.setState({ error })
     }
   }
 
@@ -76,6 +101,7 @@ class ViewCat extends Component {
 
   addFavourite = async userId => {
     try {
+      this.setState({ isBeingAddedToFavourites: true })
       const res = await fetch(Constants.FAVOURITES_URL, {
         method: 'POST',
         headers: {
@@ -87,9 +113,56 @@ class ViewCat extends Component {
       if (res.ok) {
         const data = await res.json()
         if (data.message === 'SUCCESS') {
-          this.setState({ addedToFavourites: true })
-          alert('added')
+          this.setState({
+            isBeingAddedToFavourites: false,
+            isAddedToFavourites: true,
+            favouriteId: data.id,
+          })
+          this.updateFavourites()
         }
+      }
+    } catch (error) {
+      this.setState({ error })
+    }
+  }
+
+  getAllFavourites = async userId => {
+    try {
+      this.setState({ loading: true })
+      const res = await fetch('https://api.thecatapi.com/v1/favourites', {
+        crossDomain: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': Constants.API_KEY,
+        },
+      })
+      if (res.ok) {
+        const data = await res.json()
+        const filteredFavourites = data.filter(favourite => favourite.sub_id === userId)
+        this.setState({ favourites: filteredFavourites, loading: false })
+      }
+    } catch (error) {
+      this.setState({ error, loading: false })
+      throw new Error(error)
+    }
+  }
+
+  removeFavorite = async () => {
+    try {
+      this.setState({ isBeingRemovedFromFavourites: true })
+      const res = await fetch(Constants.FAVOURITES_URL + '/' + this.state.favouriteId, {
+        method: 'DELETE',
+        headers: {
+          'x-api-key': Constants.API_KEY,
+        },
+      })
+      if (res.ok) {
+        this.setState({
+          isBeingRemovedFromFavourites: false,
+          favouriteId: '',
+          isAddedToFavourites: false,
+        })
+        this.updateFavourites()
       }
     } catch (error) {
       throw new Error(error)
@@ -97,13 +170,23 @@ class ViewCat extends Component {
   }
 
   render() {
-    const { breeds, urlWithKitty, loadingImg, selectedBreed, addedToFavourites } = this.state
+    const {
+      breeds,
+      urlWithKitty,
+      loadingImg,
+      selectedBreed,
+      isAddedToFavourites,
+      error,
+      isBeingAddedToFavourites,
+      isBeingRemovedFromFavourites,
+    } = this.state
 
     return (
       <AuthUserContext.Consumer>
         {authUser => (
           <>
-            <button onClick={this.handleClick} className="show-cat-button">
+            <h2>View cats</h2>
+            <button onClick={this.getRandomCat} disabled={loadingImg}>
               Show random cat
             </button>
             Select breed:
@@ -116,21 +199,31 @@ class ViewCat extends Component {
               ))}
             </select>
             {selectedBreed && (
-              <button onClick={this.getSpecificBreedImage}>
+              <button onClick={this.getSpecificBreedImage} disabled={loadingImg}>
                 Show another cat of seleced breed
               </button>
             )}
-            <div className="cat-img-container">
+            <div>
               {loadingImg && <h4>Loading...</h4>}
               {urlWithKitty && (
                 <>
-                  <button onClick={() => this.addFavourite(authUser.uid)} disabled={addedToFavourites}>
-                    Add to favourites
-                  </button>
-                  <img src={urlWithKitty} alt="cat" className="cat-img" />
+                  {isAddedToFavourites ? (
+                    <button onClick={this.removeFavorite} disabled={isBeingRemovedFromFavourites}>
+                      Remove from favourites
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => this.addFavourite(authUser.uid)}
+                      disabled={isBeingAddedToFavourites}
+                    >
+                      Add to favourites
+                    </button>
+                  )}
+                  <img src={urlWithKitty} alt="cat" />
                 </>
               )}
             </div>
+            {error && <p>{error.message}</p>}
           </>
         )}
       </AuthUserContext.Consumer>
