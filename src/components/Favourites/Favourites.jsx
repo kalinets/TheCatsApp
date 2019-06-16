@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import withAuthorization from '../../hoc/withAuthorization'
 import { firebase } from '../../firebase'
 import * as Constants from '../../constants'
+import { Button } from 'rsuite'
 
 class Favourites extends Component {
   state = {
@@ -108,15 +109,15 @@ class Favourites extends Component {
                   >
                     <img src={favourite.image.url} alt="cat" />
                     {this.isRemoved(favourite.id) ? (
-                      <button
+                      <Button color="green"
                         onClick={() =>
                           this.addFavouriteBack(favourite.id, favourite.image_id, favourite.sub_id)
                         }
                       >
                         Add back to favorites
-                      </button>
+                      </Button>
                     ) : (
-                      <button onClick={() => this.removeFavorite(favourite.id)}>Remove</button>
+                      <Button color="red" onClick={() => this.removeFavorite(favourite.id)}>Remove</Button>
                     )}
                   </div>
                 ))}

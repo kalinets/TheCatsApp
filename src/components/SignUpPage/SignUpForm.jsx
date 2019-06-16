@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { HOME } from '../../constants/routes'
 import { auth } from '../../firebase'
+import { Button } from 'rsuite'
 
 class SignUpForm extends Component {
   static propTypes = {
@@ -64,7 +65,9 @@ class SignUpForm extends Component {
           />
         </div>
         <div>
-          <button disabled={isInvalid}>Submit</button>
+          <Button type="submit" color="green" disabled={isInvalid}>
+            Submit
+          </Button>
         </div>
         {error && <p>{error.message}</p>}
       </form>

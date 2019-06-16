@@ -10,7 +10,7 @@ module.exports = {
         use: ['babel-loader'],
       },
       {
-        test: /\.s(a|c)ss$/,
+        test: /\.(sa|sc|c)ss$/,
         exclude: /\.module.(s(a|c)ss)$/,
         loader: [
           'style-loader',
@@ -26,7 +26,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx', '.sass'],
+    extensions: ['*', '.js', '.jsx', '.sass', '.css'],
     alias: {
       $componetns: __dirname + '/src/components',
       $constants: __dirname + '/src/constants',

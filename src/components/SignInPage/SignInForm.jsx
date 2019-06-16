@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { HOME } from '../../constants/routes'
 import { auth } from '../../firebase'
+import { Button } from 'rsuite'
 
 type Props = {
   history: mixed,
@@ -63,7 +64,9 @@ class SignInForm extends Component<Props, State> {
           />
         </div>
         <div>
-          <button disabled={isInvalid}>Sign in</button>
+          <Button type="submit" color="green" disabled={isInvalid}>
+            Sign in
+          </Button>
         </div>
         {error && <p>{error.message}</p>}
       </form>

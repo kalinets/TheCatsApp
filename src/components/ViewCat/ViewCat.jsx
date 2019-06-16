@@ -3,6 +3,7 @@ import * as Constants from '../../constants'
 import { firebase } from '../../firebase'
 import withAuthorization from '../../hoc/withAuthorization'
 import AuthUserContext from '../AuthUserContext/AuthUserContext'
+import { Button, Loader } from 'rsuite'
 
 class ViewCat extends Component {
   state = {
@@ -186,9 +187,9 @@ class ViewCat extends Component {
         {authUser => (
           <>
             <h2>View cats</h2>
-            <button onClick={this.getRandomCat} disabled={loadingImg}>
+            <Button color="blue" onClick={this.getRandomCat} loading={loadingImg}>
               Show random cat
-            </button>
+            </Button>
             Select breed:
             <select onChange={this.handleSelect} value={selectedBreed}>
               <option value="" />
@@ -199,25 +200,30 @@ class ViewCat extends Component {
               ))}
             </select>
             {selectedBreed && (
-              <button onClick={this.getSpecificBreedImage} disabled={loadingImg}>
+              <Button color="blue" onClick={this.getSpecificBreedImage} loading={loadingImg}>
                 Show another cat of seleced breed
-              </button>
+              </Button>
             )}
             <div>
-              {loadingImg && <h4>Loading...</h4>}
+              {loadingImg && <Loader />}
               {urlWithKitty && (
                 <>
                   {isAddedToFavourites ? (
-                    <button onClick={this.removeFavorite} disabled={isBeingRemovedFromFavourites}>
+                    <Button
+                      color="red"
+                      onClick={this.removeFavorite}
+                      loading={isBeingRemovedFromFavourites}
+                    >
                       Remove from favourites
-                    </button>
+                    </Button>
                   ) : (
-                    <button
+                    <Button
+                      color="green"
                       onClick={() => this.addFavourite(authUser.uid)}
-                      disabled={isBeingAddedToFavourites}
+                      loading={isBeingAddedToFavourites}
                     >
                       Add to favourites
-                    </button>
+                    </Button>
                   )}
                   <img src={urlWithKitty} alt="cat" />
                 </>

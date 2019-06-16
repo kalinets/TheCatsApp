@@ -48,6 +48,7 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
+    "babel-preset-rsuite": "^0.1.1",
     "css-loader": "^3.0.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
@@ -72,6 +73,7 @@
     "firebase": "^6.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.1"
+    "react-router-dom": "^5.0.1",
+    "rsuite": "^3.8.6"
   }
 }
