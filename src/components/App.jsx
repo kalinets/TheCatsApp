@@ -18,14 +18,16 @@ const App = () => (
   <BrowserRouter>
     <NavBar />
     <h1>The Cats App by @jason</h1>
-    <Switch>
-      <Route exact path={Routes.HOME} component={WelcomePage} />
-      <Route path={Routes.FAVOURITES} component={Favourites} />
-      <Route path={Routes.SIGN_UP} component={SignUpPage} />
-      <Route path={Routes.SIGN_IN} component={SignInPage} />
-      <Route path={Routes.VIEW_CAT} component={ViewCat} />
-      <Route path="*" component={NotFound} />
-    </Switch>
+    <div className="inner">
+      <Switch>
+        <Route exact path={Routes.HOME} component={WelcomePage} />
+        <Route path={Routes.FAVOURITES} component={Favourites} />
+        <Route path={Routes.SIGN_UP} component={SignUpPage} />
+        <Route path={Routes.SIGN_IN} component={SignInPage} />
+        <Route path={Routes.VIEW_CAT} component={ViewCat} />
+        <Route path="*" component={NotFound} />
+      </Switch>
+    </div>
     <OfflineBanner />
   </BrowserRouter>
 )

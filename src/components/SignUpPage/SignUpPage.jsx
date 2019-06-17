@@ -7,7 +7,7 @@ import SignUpForm from './SignUpForm'
 
 const SignUpPage = ({ history }) => (
   <>
-    <h4>Sign up page</h4>
+    <h2>Sign up page</h2>
     <SignUpForm history={history} />
   </>
 )

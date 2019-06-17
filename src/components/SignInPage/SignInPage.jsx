@@ -7,7 +7,7 @@ import SignInForm from './SignInForm'
 
 const SignInPage = ({ history }) => (
   <>
-    <h4>Sign in page</h4>
+    <h2>Sign in page</h2>
     <SignInForm history={history} />
   </>
 )

@@ -4,6 +4,7 @@ import { firebase, auth } from '../../firebase'
 import { API_KEY } from '../../constants'
 import * as Routes from '../../constants/routes'
 import AuthUserContext from '../AuthUserContext/AuthUserContext'
+import { Button } from 'rsuite'
 
 type State = {
   favourite: Array<Object>,
@@ -48,21 +49,23 @@ class NavBar extends Component<{}, State> {
       <AuthUserContext.Consumer>
         {authUser => (
           <nav>
-            <Link to={Routes.HOME}>Home</Link>
-            {authUser ? (
-              <>
-                <Link to={Routes.VIEW_CAT}>View cats</Link>
-                {!!favourites.length && <Link to={Routes.FAVOURITES}>Favourite cats</Link>}
-                <button type="button" onClick={auth.doSignOut}>
-                  Sign Out
-                </button>
-              </>
-            ) : (
-              <>
-                <Link to={Routes.SIGN_IN}>Sign in</Link>
-                <Link to={Routes.SIGN_UP}>Create account</Link>
-              </>
-            )}
+            <div className="inner">
+              <Link to={Routes.HOME}>Home</Link>
+              {authUser ? (
+                <>
+                  <Link to={Routes.VIEW_CAT}>View cats</Link>
+                  {!!favourites.length && <Link to={Routes.FAVOURITES}>Favourite cats</Link>}
+                  <Button color="yellow" type="button" onClick={auth.doSignOut}>
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link to={Routes.SIGN_IN}>Sign in</Link>
+                  <Link to={Routes.SIGN_UP}>Create account</Link>
+                </>
+              )}
+            </div>
           </nav>
         )}
       </AuthUserContext.Consumer>

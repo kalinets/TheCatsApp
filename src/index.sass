@@ -1,8 +1,59 @@
+body
+  font-size: 18px
+  color: #e8e8e8
+  background: #263859
+h1
+  text-align: center
+
+.cats-app
+  min-height: 100vh
+  padding: 90px 20px
+
+.inner
+  max-width: 768px
+  margin: auto
+
+input
+  margin-bottom: 5px
+  padding: 0 10px
+  border-radius: 5px
+  height: 35px
+  border: none
+  color: #263859
+  background: #e7f0fe
+
+select
+  color: #263859
+
+button
+  font-size: 18px !important
+
+h1
+  font-size: 2em
+h2
+  font-size: 1.5em
+
 img
+  display: block
   max-width: 320px
-nav a
-  display: inline-block
-  margin: 0 5px
+
+nav
+  position: fixed
+  top: 0
+  left: 0
+  z-index: 1
+  width: 100%
+  padding: 20px
+  background: #17223b
+  a
+    display: inline-block
+    margin: 0 15px
+
+.error
+  margin-top: 5px
+  font-style: italic
+  color: red
+
 .app-offline
   position: fixed
   bottom: 0
@@ -15,3 +66,15 @@ nav a
   text-align: center
   font-size: 25px
   line-height: 20vh
+
+.favourites-container
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+.favourite
+  width: 30%
+  margin-bottom: 30px
+  text-align: center
+  img
+    width: 100%
+    margin-bottom: 10px

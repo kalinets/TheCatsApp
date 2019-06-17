@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import withAuthorization from '../../hoc/withAuthorization'
 import { firebase } from '../../firebase'
 import * as Constants from '../../constants'
-import { Button } from 'rsuite'
+import { Button, Loader } from 'rsuite'
 
 class Favourites extends Component {
   state = {
@@ -78,7 +78,7 @@ class Favourites extends Component {
         if (index !== -1) {
           newRemoved.splice(index, 1)
           this.setState({ removed: newRemoved })
-          this.updateFavourites()
+          // this.updateFavourites()
         }
       }
     } catch (error) {
@@ -95,21 +95,17 @@ class Favourites extends Component {
       <>
         <h2>Favourites</h2>
         {loading ? (
-          <h4>Loading...</h4>
+          <Loader />
         ) : (
-          <div>
+          <div className="favourites-container">
             {!favourites.length
               ? 'You have no favourite cat images'
               : favourites.map(favourite => (
-                  <div
-                    key={favourite.id}
-                    className={`id${favourite.id} ${
-                      this.isRemoved(favourite.id) ? 'true' : 'false'
-                    }`}
-                  >
+                  <div key={favourite.id} className="favourite">
                     <img src={favourite.image.url} alt="cat" />
                     {this.isRemoved(favourite.id) ? (
-                      <Button color="green"
+                      <Button
+                        color="green"
                         onClick={() =>
                           this.addFavouriteBack(favourite.id, favourite.image_id, favourite.sub_id)
                         }
@@ -117,7 +113,9 @@ class Favourites extends Component {
                         Add back to favorites
                       </Button>
                     ) : (
-                      <Button color="red" onClick={() => this.removeFavorite(favourite.id)}>Remove</Button>
+                      <Button color="red" onClick={() => this.removeFavorite(favourite.id)}>
+                        Remove
+                      </Button>
                     )}
                   </div>
                 ))}

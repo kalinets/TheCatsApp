@@ -187,10 +187,12 @@ class ViewCat extends Component {
         {authUser => (
           <>
             <h2>View cats</h2>
-            <Button color="blue" onClick={this.getRandomCat} loading={loadingImg}>
-              Show random cat
-            </Button>
-            Select breed:
+            <div>
+              <Button color="blue" onClick={this.getRandomCat} loading={loadingImg}>
+                Show random cat
+              </Button>
+            </div>
+            <p>Or select breed:</p>
             <select onChange={this.handleSelect} value={selectedBreed}>
               <option value="" />
               {breeds.map(breed => (
@@ -201,7 +203,7 @@ class ViewCat extends Component {
             </select>
             {selectedBreed && (
               <Button color="blue" onClick={this.getSpecificBreedImage} loading={loadingImg}>
-                Show another cat of seleced breed
+                Show another cat of selected breed
               </Button>
             )}
             <div>
@@ -229,7 +231,7 @@ class ViewCat extends Component {
                 </>
               )}
             </div>
-            {error && <p>{error.message}</p>}
+            {error && <p className="error">{error.message}</p>}
           </>
         )}
       </AuthUserContext.Consumer>
