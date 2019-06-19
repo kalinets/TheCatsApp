@@ -29,6 +29,7 @@ button
   font-size: 18px !important
 
 h1
+  margin-bottom: 50px
   font-size: 2em
 h2
   font-size: 1.5em
@@ -45,9 +46,17 @@ nav
   width: 100%
   padding: 20px
   background: #17223b
+  .inner
+    display: flex
+    justify-content: space-between
+    align-items: center
   a
     display: inline-block
     margin: 0 15px
+  .separator
+    flex-grow: 1
+  button
+    color: #17223b !important
 
 .error
   margin-top: 5px
@@ -78,3 +87,41 @@ nav
   img
     width: 100%
     margin-bottom: 10px
+
+.viewer-wrapper
+  margin-top: 20px
+  display: flex
+  justify-content: space-between
+  button
+    display: block
+    margin-bottom: 10px
+
+.rs-picker-select
+  margin: 10px 0
+.rs-picker-toggle
+  .rs-picker-toggle-placeholder
+    color: #fff
+.rs-picker-has-value
+  .rs-picker-toggle
+    .rs-picker-toggle-value
+      color: #fff
+.rs-picker-subtle
+  .rs-picker-toggle
+    z-index: 0
+    &:hover,
+    &:active
+      background: transparent
+
+.image-viewer
+  position: relative
+  flex-grow: 1
+  margin-left: 40px
+  img
+    max-width: 100%
+
+.rs-loader-wrapper
+  z-index: 2
+.rs-loader-backdrop
+  background: rgba(#000, .8)
+.rs-loader-spin:before
+  border-color: rgba(247, 247, 250, .1)

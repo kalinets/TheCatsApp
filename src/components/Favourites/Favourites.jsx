@@ -18,7 +18,7 @@ class Favourites extends Component {
 
   updateFavourites = () => {
     firebase.auth.onAuthStateChanged(authUser => {
-      this.getAllFavourites(authUser.uid)
+      authUser && this.getAllFavourites(authUser.uid)
     })
   }
 
@@ -95,7 +95,7 @@ class Favourites extends Component {
       <>
         <h2>Favourites</h2>
         {loading ? (
-          <Loader />
+          <Loader size="lg" center backdrop />
         ) : (
           <div className="favourites-container">
             {!favourites.length

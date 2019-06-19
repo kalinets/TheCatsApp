@@ -19,7 +19,7 @@ class NavBar extends Component<{}, State> {
 
   componentDidMount() {
     firebase.auth.onAuthStateChanged(authUser => {
-      this.getAllFavourites(authUser.uid)
+      authUser && this.getAllFavourites(authUser.uid)
     })
   }
 
@@ -55,6 +55,7 @@ class NavBar extends Component<{}, State> {
                 <>
                   <Link to={Routes.VIEW_CAT}>View cats</Link>
                   {!!favourites.length && <Link to={Routes.FAVOURITES}>Favourite cats</Link>}
+                  <div className="separator" />
                   <Button color="yellow" type="button" onClick={auth.doSignOut}>
                     Sign Out
                   </Button>
@@ -63,6 +64,7 @@ class NavBar extends Component<{}, State> {
                 <>
                   <Link to={Routes.SIGN_IN}>Sign in</Link>
                   <Link to={Routes.SIGN_UP}>Create account</Link>
+                  <div className="separator" />
                 </>
               )}
             </div>
