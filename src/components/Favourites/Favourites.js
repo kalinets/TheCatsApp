@@ -1,12 +1,21 @@
+// @flow
+
 import React, { Component } from 'react'
 import withAuthorization from '../../hoc/withAuthorization'
 import { firebase } from '../../firebase'
 import * as Constants from '../../constants'
 import { Button, Loader } from 'rsuite'
 
-class Favourites extends Component {
+type State = {
+  favourites: Array<Object>,
+  loading: boolean,
+  error: Object,
+  removed: Array<Number>,
+}
+
+class Favourites extends Component<{}, State> {
   state = {
-    favourites: null,
+    favourites: [],
     loading: true,
     error: null,
     removed: [],

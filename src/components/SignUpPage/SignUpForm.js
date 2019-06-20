@@ -1,19 +1,32 @@
+// @flow
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { HOME } from '../../constants/routes'
 import { auth } from '../../firebase'
 import { Button } from 'rsuite'
 
-class SignUpForm extends Component {
+type Props = {
+  history: { push: Function },
+}
+
+type State = {
+  email: string,
+  passwordOne: string,
+  passwordTwo: string,
+  error: Object,
+}
+
+class SignUpForm extends Component<Props, State> {
   static propTypes = {
     history: PropTypes.object,
   }
 
   state = { email: '', passwordOne: '', passwordTwo: '', error: '' }
 
-  handleChange = e => this.setState({ [e.target.name]: e.target.value })
+  handleChange = (e: Object) => this.setState({ [e.target.name]: e.target.value })
 
-  handleSubmit = e => {
+  handleSubmit = (e: Object) => {
     this.setState({ error: '' })
     const { history } = this.props
     const { email, passwordOne } = this.state

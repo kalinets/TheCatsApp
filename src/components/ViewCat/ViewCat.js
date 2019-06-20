@@ -5,7 +5,22 @@ import withAuthorization from '../../hoc/withAuthorization'
 import AuthUserContext from '../AuthUserContext/AuthUserContext'
 import { Button, Loader, SelectPicker } from 'rsuite'
 
-class ViewCat extends Component {
+type State = {
+  breeds: Array<Object>,
+  urlWithKitty: string,
+  loadingPage: boolean,
+  loadingImg: boolean,
+  selectedBreed: string,
+  selectedCatId: string,
+  isAddedToFavourites: boolean,
+  error: string,
+  favourites: Array<Object>,
+  favouriteId: string,
+  isBeingAddedToFavourites: boolean,
+  isBeingRemovedFromFavourites: boolean,
+}
+
+class ViewCat extends Component<{}, State> {
   state = {
     breeds: [],
     urlWithKitty: '',
@@ -15,7 +30,7 @@ class ViewCat extends Component {
     selectedCatId: '',
     isAddedToFavourites: false,
     error: '',
-    favourites: null,
+    favourites: [],
     favouriteId: '',
     isBeingAddedToFavourites: false,
     isBeingRemovedFromFavourites: false,
@@ -96,12 +111,12 @@ class ViewCat extends Component {
     }
   }
 
-  handleSelect = async value => {
+  handleSelect = async (value: string) => {
     await this.setState({ selectedBreed: value })
     this.getSpecificBreedImage()
   }
 
-  addFavourite = async userId => {
+  addFavourite = async (userId: Number) => {
     try {
       this.setState({ isBeingAddedToFavourites: true })
       const res = await fetch(Constants.FAVOURITES_URL, {
@@ -128,7 +143,7 @@ class ViewCat extends Component {
     }
   }
 
-  getAllFavourites = async userId => {
+  getAllFavourites = async (userId: Number) => {
     try {
       const res = await fetch('https://api.thecatapi.com/v1/favourites', {
         crossDomain: true,

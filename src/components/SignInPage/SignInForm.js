@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { HOME } from '../../constants/routes'
@@ -5,12 +7,13 @@ import { auth } from '../../firebase'
 import { Button } from 'rsuite'
 
 type Props = {
-  history: mixed,
+  history: Object,
+  history: { push: Function },
 }
 
 type State = {
-  email: String,
-  password: String,
+  email: string,
+  password: string,
   error: Object,
 }
 
@@ -25,9 +28,9 @@ class SignInForm extends Component<Props, State> {
     error: '',
   }
 
-  handleChange = e => this.setState({ [e.target.name]: e.target.value })
+  handleChange = (e: Object) => this.setState({ [e.target.name]: e.target.value })
 
-  handleSubmit = e => {
+  handleSubmit = (e: Object) => {
     this.setState({ error: '' })
     const { history } = this.props
     const { email, password } = this.state

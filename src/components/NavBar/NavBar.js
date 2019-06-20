@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { firebase, auth } from '../../firebase'
@@ -7,7 +9,7 @@ import AuthUserContext from '../AuthUserContext/AuthUserContext'
 import { Button } from 'rsuite'
 
 type State = {
-  favourite: Array<Object>,
+  favourites: Array<Object>,
   error: Object,
 }
 
@@ -23,9 +25,8 @@ class NavBar extends Component<{}, State> {
     })
   }
 
-  getAllFavourites = async userId => {
+  getAllFavourites = async (userId: Number) => {
     try {
-      this.setState({ loading: true })
       const res = await fetch('https://api.thecatapi.com/v1/favourites', {
         crossDomain: true,
         headers: {
@@ -39,7 +40,7 @@ class NavBar extends Component<{}, State> {
         this.setState({ favourites: filteredFavourites })
       }
     } catch (error) {
-      this.setState({ error, loading: false })
+      this.setState({ error })
       throw new Error(error)
     }
   }
