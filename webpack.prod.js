@@ -5,7 +5,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
 module.exports = {
   mode: 'production',
-  entry: './src/index.js',
+  entry: ['@babel/polyfill', './src/index.js'],
   output: {
     filename: 'bundle.js',
     path: __dirname + '/dist',
@@ -33,7 +33,7 @@ module.exports = {
         },
       },
       {
-        test: /\.(sa|c)ss$/,
+        test: /\.(sa|sc|c)ss$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
     ],

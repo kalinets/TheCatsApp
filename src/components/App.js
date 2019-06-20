@@ -12,7 +12,6 @@ import WelcomePage from './WelcomePage/WelcomePage'
 import NotFound from './NotFound/NotFound'
 import SignInPage from './SignInPage/SignInPage'
 import SignUpPage from './SignUpPage/SignUpPage'
-import 'rsuite/dist/styles/rsuite.min.css'
 
 const App = () => (
   <BrowserRouter>
