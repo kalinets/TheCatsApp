@@ -2,15 +2,15 @@ import { configure } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import React from 'react'
 import { shallow } from 'enzyme'
-import App from './App'
+import WelcomePage from './WelcomePage'
 
 configure({ adapter: new Adapter() })
 
-describe('<App />', () => {
+describe('<WelcomePage />', () => {
   test('renders without crashing', () => {
-    shallow(<App />)
+    shallow(<WelcomePage />)
   })
   test('matches snapshot', () => {
-    expect(shallow(<App />)).toMatchSnapshot()
+    expect(shallow(<WelcomePage />)).toMatchSnapshot()
   })
 })

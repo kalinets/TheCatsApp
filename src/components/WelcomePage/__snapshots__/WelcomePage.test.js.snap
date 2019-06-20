@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<WelcomePage /> matches snapshot 1`] = `
+<Fragment>
+  <h2>
+    Welcome to cat lovers app.
+  </h2>
+  <ContextConsumer>
+    <Component />
+  </ContextConsumer>
+</Fragment>
+`;
