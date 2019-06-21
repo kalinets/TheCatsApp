@@ -55,7 +55,7 @@ class NavBar extends Component<{}, State> {
               {authUser ? (
                 <>
                   <Link to={Routes.VIEW_CAT}>View cats</Link>
-                  {!!favourites.length && <Link to={Routes.FAVOURITES}>Favourite cats</Link>}
+                  {true && <Link to={Routes.FAVOURITES}>Favourite cats</Link>}
                   <div className="separator" />
                   <Button color="yellow" type="button" onClick={auth.doSignOut}>
                     Sign Out

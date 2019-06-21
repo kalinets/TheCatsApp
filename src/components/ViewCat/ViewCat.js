@@ -84,7 +84,7 @@ class ViewCat extends Component<{}, State> {
         this.setState({ breeds: data, loadingPage: false })
       }
     } catch (error) {
-      this.setState({ error })
+      this.setState({ error, loadingPage: false })
     }
   }
 

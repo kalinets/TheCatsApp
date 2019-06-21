@@ -8,7 +8,7 @@ import { Button, Loader } from 'rsuite'
 
 type State = {
   favourites: Array<Object>,
-  loading: boolean,
+  loadingPage: boolean,
   error: Object,
   removed: Array<Number>,
 }
@@ -16,7 +16,7 @@ type State = {
 class Favourites extends Component<{}, State> {
   state = {
     favourites: [],
-    loading: true,
+    loadingPage: true,
     error: null,
     removed: [],
   }
@@ -33,7 +33,7 @@ class Favourites extends Component<{}, State> {
 
   getAllFavourites = async userId => {
     try {
-      this.setState({ loading: true })
+      this.setState({ loadingPage: true })
       const res = await fetch('https://api.thecatapi.com/v1/favourites', {
         crossDomain: true,
         headers: {
@@ -44,10 +44,10 @@ class Favourites extends Component<{}, State> {
       if (res.ok) {
         const data = await res.json()
         const filteredFavourites = data.filter(favourite => favourite.sub_id === userId)
-        this.setState({ favourites: filteredFavourites, loading: false })
+        this.setState({ favourites: filteredFavourites, loadingPage: false })
       }
     } catch (error) {
-      this.setState({ error, loading: false })
+      this.setState({ error, loadingPage: false })
       throw new Error(error)
     }
   }
@@ -99,11 +99,11 @@ class Favourites extends Component<{}, State> {
   isRemoved = id => this.state.removed.includes(id)
 
   render() {
-    const { favourites, loading } = this.state
+    const { favourites, loadingPage } = this.state
     return (
       <>
         <h2>Favourites</h2>
-        {loading ? (
+        {loadingPage ? (
           <Loader size="lg" center backdrop />
         ) : (
           <div className="favourites-container">
