@@ -18,12 +18,16 @@ type State = {
   favouriteId: string,
   isBeingAddedToFavourites: boolean,
   isBeingRemovedFromFavourites: boolean,
+  kittyImageWidth: Number,
+  kittyImageHeight: Number,
 }
 
 class ViewCat extends Component<{}, State> {
   state = {
     breeds: [],
     urlWithKitty: '',
+    kittyImageWidth: null,
+    kittyImageHeight: null,
     loadingPage: true,
     loadingImg: false,
     selectedBreed: '',
@@ -64,6 +68,8 @@ class ViewCat extends Component<{}, State> {
         const isFavourite = favourites.some(favourite => favourite.image_id === data[0].id)
         this.setState({
           urlWithKitty: data[0].url,
+          kittyImageWidth: data[0].width,
+          kittyImageHeight: data[0].height,
           selectedCatId: data[0].id,
           loadingImg: false,
           isAddedToFavourites: isFavourite,
@@ -189,6 +195,8 @@ class ViewCat extends Component<{}, State> {
     const {
       breeds,
       urlWithKitty,
+      kittyImageWidth,
+      kittyImageHeight,
       loadingImg,
       loadingPage,
       selectedBreed,
@@ -248,7 +256,13 @@ class ViewCat extends Component<{}, State> {
                           Add to favourites
                         </Button>
                       )}
-                      <img src={urlWithKitty} alt="cat" />
+                      <div
+                        className="image-container"
+                        style={{ paddingTop: (kittyImageHeight / kittyImageWidth) * 100 + '%' }}
+                      >
+                        <p>Loading image...</p>
+                        <img src={urlWithKitty} alt="cat" />
+                      </div>
                     </>
                   )}
                 </div>
